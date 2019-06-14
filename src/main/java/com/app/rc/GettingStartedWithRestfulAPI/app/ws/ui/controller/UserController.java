@@ -1,6 +1,4 @@
-
 package com.app.rc.GettingStartedWithRestfulAPI.app.ws.ui.controller;
-
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +7,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import com.app.rc.GettingStartedWithRestfulAPI.app.logging.InitLogging;
+import com.app.rc.GettingStartedWithRestfulAPI.app.logging.Logging;
 import com.app.rc.GettingStartedWithRestfulAPI.app.ws.service.UserService;
 import com.app.rc.GettingStartedWithRestfulAPI.app.ws.shared.dto.UserDto;
 import com.app.rc.GettingStartedWithRestfulAPI.app.ws.ui.model.request.UserModel;
 import com.app.rc.GettingStartedWithRestfulAPI.app.ws.ui.model.response.UserRest;
-
 
 /**
  * DispatcherServlet will lookup to the listeners/URI
@@ -35,7 +31,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    InitLogging logger = new InitLogging ( );
+    Logging logger = new Logging ( );
 
     /**
      * Steps
@@ -69,46 +65,44 @@ public class UserController {
      */
     @PostMapping
     public UserRest create (
-            @RequestBody UserModel userBean ) {
-
-
-        logger.LOG
-                .info ( "Controller - Create User Hit..." );
-
+            @RequestBody UserModel userBean )
+    {
+        logger.LOG.info (
+                "Controller - Create User Hit..." );
         // Step-1 - Define result and shared object
         UserRest res = new UserRest ( ); // Result Object
         UserDto dto = new UserDto ( ); // Shared Object
-
         logger.LOG.info (
                 "Controller - Create User - Step-2..." );
         // Step-2 - Prepare shared object
-        BeanUtils.copyProperties ( userBean, dto );
-
+        BeanUtils.copyProperties (
+                userBean,
+                dto );
         logger.LOG.info (
                 "Controller - Create User - Step-3..." );
         // Step-3 - Call service logic
-        UserDto createdData = userService
-                .createUser ( dto );
-
+        UserDto createdData = userService.createUser (
+                dto );
         logger.LOG.info (
                 "Controller - Create User - Step-4..." );
         // Step-4 - Prepare result object
-        BeanUtils.copyProperties ( createdData, res );
-
+        BeanUtils.copyProperties (
+                createdData,
+                res );
         logger.LOG.info (
                 "Controller - Create User Done..." );
         return res;
     }
 
-    public void remove ( ) {
-
+    public void remove ( )
+    {
     }
 
-    public void update ( ) {
-
+    public void update ( )
+    {
     }
 
-    public void display ( ) {
-
+    public void display ( )
+    {
     }
 }

@@ -1,7 +1,6 @@
-
 package com.app.rc.GettingStartedWithRestfulAPI.app.ws.security;
 
-
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,14 +8,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
+import com.app.rc.GettingStartedWithRestfulAPI.app.logging.Logging;
 import com.app.rc.GettingStartedWithRestfulAPI.app.ws.service.UserService;
 
-
+@Configuration
 @EnableWebSecurity
 public class WebSecurity
-        extends
-            WebSecurityConfigurerAdapter {
+        extends WebSecurityConfigurerAdapter {
 
     private final UserService userDetailsService;
 
@@ -40,21 +38,27 @@ public class WebSecurity
      * be // authenticated via // Login
      */
     @Override
-    protected void configure ( HttpSecurity http )
-            throws Exception {
-
-        // The pages does not require login
-        http.authorizeRequests ( )
-                .antMatchers ( "/", "/login", "/logout" )
-                .permitAll ( );
-
-        http.csrf ( ).disable ( ).authorizeRequests ( )
-                .antMatchers ( HttpMethod.POST,
-                        SecurityConstants.SIGN_UP_URL )
+    protected void configure (
+            HttpSecurity http )
+            throws Exception
+    {
+        Logging.LOG.info (
+                "Security Authentication started..." );
+        // For Database Access //
+        http.authorizeRequests ( ).antMatchers (
+                HttpMethod.GET,
+                "/console" ).permitAll ( );
+        // For Signing-in with the user data //
+        http.csrf ( ).and ( ).cors ( ).disable ( );
+        // Login Authentication
+        http.authorizeRequests ( ).antMatchers (
+                HttpMethod.POST,
+                SecurityConstants.SIGN_UP_URL )
                 .permitAll ( ).anyRequest ( )
-                .authenticated ( ).and ( )
-                .addFilter ( new AuthenticationFilter (
-                        authenticationManager ( ) ) );
+                .authenticated ( ).and ( ).addFilter (
+                        getAuthenticationFilter ( ) );
+        Logging.LOG.info (
+                "Security Authentication done..." );
     }
 
     /**
@@ -65,8 +69,23 @@ public class WebSecurity
     @Override
     protected void configure (
             AuthenticationManagerBuilder auth )
-            throws Exception {
-        auth.userDetailsService ( userDetailsService )
-                .passwordEncoder ( bCryptPasswordEncoder );
+            throws Exception
+    {
+        Logging.LOG.info (
+                "Security AuthenticationManager Validation..." );
+        auth.userDetailsService (
+                userDetailsService ).passwordEncoder (
+                        bCryptPasswordEncoder );
+    }
+
+    private AuthenticationFilter getAuthenticationFilter ( )
+            throws Exception
+    {
+        final AuthenticationFilter filter = new AuthenticationFilter (
+                authenticationManager ( ),
+                userDetailsService );
+        Logging.LOG.info (
+                "Security AuthenticationFilter Validation..." );
+        return filter;
     }
 }
