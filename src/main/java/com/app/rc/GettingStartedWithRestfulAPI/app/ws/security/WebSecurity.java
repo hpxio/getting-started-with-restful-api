@@ -44,12 +44,15 @@ public class WebSecurity
     {
         Logging.LOG.info (
                 "Security Authentication started..." );
+
         // For Database Access //
         http.authorizeRequests ( ).antMatchers (
                 HttpMethod.GET,
                 "/console" ).permitAll ( );
+
         // For Signing-in with the user data //
         http.csrf ( ).and ( ).cors ( ).disable ( );
+
         // Login Authentication
         http.authorizeRequests ( ).antMatchers (
                 HttpMethod.POST,
@@ -57,6 +60,7 @@ public class WebSecurity
                 .permitAll ( ).anyRequest ( )
                 .authenticated ( ).and ( ).addFilter (
                         getAuthenticationFilter ( ) );
+
         Logging.LOG.info (
                 "Security Authentication done..." );
     }

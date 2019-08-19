@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.app.rc</groupId>
-	<artifactId>GettingStartedWithRestfulAPI</artifactId>
+	<artifactId>getting-started-with-restful-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>GettingStartedWithRestfulAPI</name>
-	<description>Demo project for Spring Boot</description>
+	<name>getting-started-with-restful-api</name>
+	<description>Getting Started with Spring RESTful Service - By Sergey Kargopolov</description>
 
 	<properties>
 		<java.version>1.8</java.version>
